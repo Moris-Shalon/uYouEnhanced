@@ -195,6 +195,25 @@ extern NSBundle *uYouPlusBundle();
     [sectionItems addObject:exitYT];
 
     SECTION_HEADER(LOC(@"📺 App Personalization"));
+    YTSettingsSectionItem *copySettings = [YTSettingsSectionItemClass
+        itemWithTitle:LOC(@"Copy Settings")
+        titleDescription:LOC(@"Copy all current settings to the clipboard")
+        accessibilityIdentifier:nil
+        detailTextBlock:nil
+        selectBlock:^BOOL (YTSettingsCell *cell, NSUInteger arg1) {
+//
+            NSMutableString *settingsString = [NSMutableString string];
+            for (NSString *key in @{ /* Define all keys you want to copy here */ }) {
+                BOOL enabled = [[NSUserDefaults standardUserDefaults] boolForKey:key];
+                [settingsString appendFormat:@"%@: %d", key, enabled ? 1 : 0];
+            }
+            [[UIPasteboard generalPasteboard] setString:settingsString];
+            // show a confirmation message or perform some other action here - @arichornlover
+            return YES;
+        }
+    ];
+    [sectionItems addObject:copySettings];
+
     # pragma mark - uYouEnhanced Extras Menu
     YTSettingsSectionItem *customAppMenu = [%c(YTSettingsSectionItem)
         itemWithTitle:LOC(@"uYouEnhanced Extras Menu")
